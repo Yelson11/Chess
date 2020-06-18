@@ -6,8 +6,6 @@ import com.chess.engine.classic.pieces.Piece;
 import com.chess.engine.classic.player.Player;
 import com.chess.engine.classic.player.ai.StandardBoardEvaluator;
 import com.chess.engine.classic.player.ai.StockAlphaBeta;
-import com.chess.pgn.FenUtilities;
-import com.chess.pgn.MySqlGamePersistence;
 import com.google.common.collect.Lists;
 
 import javax.imageio.ImageIO;
@@ -21,8 +19,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-import static com.chess.pgn.PGNUtilities.persistPGNFile;
-import static com.chess.pgn.PGNUtilities.writeGameToPGNFile;
 import static javax.swing.JFrame.setDefaultLookAndFeelDecorated;
 import static javax.swing.SwingUtilities.*;
 
@@ -60,7 +56,7 @@ public final class Table extends Observable {
         this.gameFrame.setLayout(new BorderLayout());
         this.chessBoard = Board.createStandardBoard();
         this.boardDirection = BoardDirection.NORMAL;
-        this.highlightLegalMoves = false;
+        this.highlightLegalMoves = true;
         this.useBook = false;
         this.pieceIconPath = "art/holywarriors/";
         this.gameHistoryPanel = new GameHistoryPanel();
@@ -152,26 +148,7 @@ public final class Table extends Observable {
         final JMenu filesMenu = new JMenu("File");
         filesMenu.setMnemonic(KeyEvent.VK_F);
 
-        final JMenuItem openPGN = new JMenuItem("Load PGN File", KeyEvent.VK_O);
-        openPGN.addActionListener(e -> {
-            JFileChooser chooser = new JFileChooser();
-            int option = chooser.showOpenDialog(Table.get().getGameFrame());
-            if (option == JFileChooser.APPROVE_OPTION) {
-                loadPGNFile(chooser.getSelectedFile());
-            }
-        });
-        filesMenu.add(openPGN);
-
-        final JMenuItem openFEN = new JMenuItem("Load FEN File", KeyEvent.VK_F);
-        openFEN.addActionListener(e -> {
-            String fenString = JOptionPane.showInputDialog("Input FEN");
-            if(fenString != null) {
-                undoAllMoves();
-                chessBoard = FenUtilities.createGameFromFEN(fenString);
-                Table.get().getBoardPanel().drawBoard(chessBoard);
-            }
-        });
-        filesMenu.add(openFEN);
+       
 
         final JMenuItem saveToPGN = new JMenuItem("Save Game", KeyEvent.VK_S);
         saveToPGN.addActionListener(e -> {
@@ -257,92 +234,6 @@ public final class Table extends Observable {
 
         final JMenu preferencesMenu = new JMenu("Preferences");
 
-        final JMenu colorChooserSubMenu = new JMenu("Choose Colors");
-        colorChooserSubMenu.setMnemonic(KeyEvent.VK_S);
-
-        final JMenuItem chooseDarkMenuItem = new JMenuItem("Choose Dark Tile Color");
-        colorChooserSubMenu.add(chooseDarkMenuItem);
-
-        final JMenuItem chooseLightMenuItem = new JMenuItem("Choose Light Tile Color");
-        colorChooserSubMenu.add(chooseLightMenuItem);
-
-        final JMenuItem chooseLegalHighlightMenuItem = new JMenuItem(
-                "Choose Legal Move Highlight Color");
-        colorChooserSubMenu.add(chooseLegalHighlightMenuItem);
-
-        preferencesMenu.add(colorChooserSubMenu);
-
-        chooseDarkMenuItem.addActionListener(e -> {
-            final Color colorChoice = JColorChooser.showDialog(Table.get().getGameFrame(), "Choose Dark Tile Color",
-                    Table.get().getGameFrame().getBackground());
-            if (colorChoice != null) {
-                Table.get().getBoardPanel().setTileDarkColor(chessBoard, colorChoice);
-            }
-        });
-
-        chooseLightMenuItem.addActionListener(e -> {
-            final Color colorChoice = JColorChooser.showDialog(Table.get().getGameFrame(), "Choose Light Tile Color",
-                    Table.get().getGameFrame().getBackground());
-            if (colorChoice != null) {
-                Table.get().getBoardPanel().setTileLightColor(chessBoard, colorChoice);
-            }
-        });
-
-        final JMenu chessMenChoiceSubMenu = new JMenu("Choose Chess Men Image Set");
-
-        final JMenuItem holyWarriorsMenuItem = new JMenuItem("Holy Warriors");
-        chessMenChoiceSubMenu.add(holyWarriorsMenuItem);
-
-        final JMenuItem rockMenMenuItem = new JMenuItem("Rock Men");
-        chessMenChoiceSubMenu.add(rockMenMenuItem);
-
-        final JMenuItem abstractMenMenuItem = new JMenuItem("Abstract Men");
-        chessMenChoiceSubMenu.add(abstractMenMenuItem);
-
-        final JMenuItem woodMenMenuItem = new JMenuItem("Wood Men");
-        chessMenChoiceSubMenu.add(woodMenMenuItem);
-
-        final JMenuItem fancyMenMenuItem = new JMenuItem("Fancy Men");
-        chessMenChoiceSubMenu.add(fancyMenMenuItem);
-
-        final JMenuItem fancyMenMenuItem2 = new JMenuItem("Fancy Men 2");
-        chessMenChoiceSubMenu.add(fancyMenMenuItem2);
-
-        woodMenMenuItem.addActionListener(e -> {
-            System.out.println("implement me");
-            Table.get().getGameFrame().repaint();
-        });
-
-        holyWarriorsMenuItem.addActionListener(e -> {
-            pieceIconPath = "art/holywarriors/";
-            Table.get().getBoardPanel().drawBoard(chessBoard);
-        });
-
-        rockMenMenuItem.addActionListener(e -> {
-        });
-
-        abstractMenMenuItem.addActionListener(e -> {
-            pieceIconPath = "art/simple/";
-            Table.get().getBoardPanel().drawBoard(chessBoard);
-        });
-
-        fancyMenMenuItem2.addActionListener(e -> {
-            pieceIconPath = "art/fancy2/";
-            Table.get().getBoardPanel().drawBoard(chessBoard);
-        });
-
-        fancyMenMenuItem.addActionListener(e -> {
-            pieceIconPath = "art/fancy/";
-            Table.get().getBoardPanel().drawBoard(chessBoard);
-        });
-
-        preferencesMenu.add(chessMenChoiceSubMenu);
-
-        chooseLegalHighlightMenuItem.addActionListener(e -> {
-            System.out.println("implement me");
-            Table.get().getGameFrame().repaint();
-        });
-
         final JMenuItem flipBoardMenuItem = new JMenuItem("Flip board");
 
         flipBoardMenuItem.addActionListener(e -> {
@@ -352,22 +243,7 @@ public final class Table extends Observable {
 
         preferencesMenu.add(flipBoardMenuItem);
         preferencesMenu.addSeparator();
-
-
-        final JCheckBoxMenuItem cbLegalMoveHighlighter = new JCheckBoxMenuItem(
-                "Highlight Legal Moves", false);
-
-        cbLegalMoveHighlighter.addActionListener(e -> highlightLegalMoves = cbLegalMoveHighlighter.isSelected());
-
-        preferencesMenu.add(cbLegalMoveHighlighter);
-
-        final JCheckBoxMenuItem cbUseBookMoves = new JCheckBoxMenuItem(
-                "Use Book Moves", false);
-
-        cbUseBookMoves.addActionListener(e -> useBook = cbUseBookMoves.isSelected());
-
-        preferencesMenu.add(cbUseBookMoves);
-
+        
         return preferencesMenu;
 
     }
@@ -400,21 +276,11 @@ public final class Table extends Observable {
     }
 
     private static void loadPGNFile(final File pgnFile) {
-        try {
-            persistPGNFile(pgnFile);
-        }
-        catch (final IOException e) {
-            e.printStackTrace();
-        }
+        //TODO
     }
 
     private static void savePGNFile(final File pgnFile) {
-        try {
-            writeGameToPGNFile(pgnFile, Table.get().getMoveLog());
-        }
-        catch (final IOException e) {
-            e.printStackTrace();
-        }
+        //TODO
     }
 
     private void undoLastMove() {
@@ -482,19 +348,9 @@ public final class Table extends Observable {
         @Override
         protected Move doInBackground() {
             final Move bestMove;
-            final Move bookMove = Table.get().getUseBook()
-                    ? MySqlGamePersistence.get().getNextBestMove(Table.get().getGameBoard(),
-                    Table.get().getGameBoard().currentPlayer(),
-                    Table.get().getMoveLog().getMoves().toString().replaceAll("\\[", "").replaceAll("]", ""))
-                    : MoveFactory.getNullMove();
-            if (Table.get().getUseBook() && bookMove != MoveFactory.getNullMove()) {
-                bestMove = bookMove;
-            }
-            else {
-                final StockAlphaBeta strategy = new StockAlphaBeta(Table.get().getGameSetup().getSearchDepth());
-                strategy.addObserver(Table.get().getDebugPanel());
-                bestMove = strategy.execute(Table.get().getGameBoard());
-            }
+            final StockAlphaBeta strategy = new StockAlphaBeta(Table.get().getGameSetup().getSearchDepth());
+            strategy.addObserver(Table.get().getDebugPanel());
+            bestMove = strategy.execute(Table.get().getGameBoard());
             return bestMove;
         }
 
