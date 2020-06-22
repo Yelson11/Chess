@@ -10,11 +10,11 @@ import juego.tablero.Tablero;
  */
 public abstract class Pieza {
     final TipoPieza tipoPieza;
-    protected final Color piezaColor;
+    protected final ColorPieza piezaColor;
     protected final int posicionPieza;
     protected final boolean ifFirstMove;
 
-    Pieza(final TipoPieza tipoPieza, final Color piezaColor, final int posicionPieza,
+    Pieza(final TipoPieza tipoPieza, final ColorPieza piezaColor, final int posicionPieza,
             final boolean esPrimerMovimiento) {
         this.posicionPieza = posicionPieza;
         this.piezaColor = piezaColor;
@@ -26,7 +26,7 @@ public abstract class Pieza {
         return this.posicionPieza;
     }
 
-    public Color getPiezaColor() {
+    public ColorPieza getPiezaColor() {
         return this.piezaColor;
     } 
 
@@ -47,8 +47,8 @@ public abstract class Pieza {
         private String piezaBlanca;
         private String piezaNegra;
 
-        public String toString(Color color) {
-            return color == Color.BLANCO ? piezaBlanca : piezaNegra;
+        public String toString(ColorPieza color) {
+            return color == ColorPieza.BLANCO ? piezaBlanca : piezaNegra;
         }
 
         TipoPieza(final String piezaBlanca, final String piezaNegra) {

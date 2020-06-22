@@ -17,11 +17,11 @@ public class Torre extends Pieza {
 
     private final static int[] CANDIDATOS_MOVIMIENTOS_VECTOR = { -8, -1, 1, 8 };
 
-    public Torre(Color piezaColor, int posicionPieza) {
+    public Torre(ColorPieza piezaColor, int posicionPieza) {
         super(TipoPieza.TORRE, piezaColor, posicionPieza, true);
     }
 
-    public Torre(Color piezaColor, int posicionPieza, boolean esPrimerMovimiento) {
+    public Torre(ColorPieza piezaColor, int posicionPieza, boolean esPrimerMovimiento) {
         super(TipoPieza.TORRE, piezaColor, posicionPieza, esPrimerMovimiento);
     }
 
@@ -46,10 +46,10 @@ public class Torre extends Pieza {
                 if (tableroUtilitarios.casillaEsValida(candidateDestinationCoordinate)) {
                     final Casilla destinoCandidatoCasilla = tablero.getCasilla(candidateDestinationCoordinate);
                     if (!destinoCandidatoCasilla.casillaEstaOcupada()) {
-                        movimientosLegales.add(new Movimiento.MovimientoImportante(tablero, this, candidateDestinationCoordinate));
+                        movimientosLegales.add(new Movimiento.MovimientoMayor(tablero, this, candidateDestinationCoordinate));
                     } else {
                         final Pieza piezaDestino = destinoCandidatoCasilla.getPieza();
-                        final Color piezaColor = piezaDestino.getPiezaColor();
+                        final ColorPieza piezaColor = piezaDestino.getPiezaColor();
 
                         if (this.piezaColor != piezaColor) {
                             movimientosLegales.add(new Movimiento.MovimientoAtaque(tablero, this,

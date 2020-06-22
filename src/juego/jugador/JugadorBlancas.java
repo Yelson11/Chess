@@ -7,7 +7,7 @@ package juego.jugador;
 
 import java.util.Collection;
 
-import juego.pieza.Color;
+import juego.pieza.ColorPieza;
 import juego.pieza.Pieza;
 import juego.tablero.Movimiento;
 import juego.tablero.Tablero;
@@ -31,8 +31,8 @@ public class JugadorBlancas extends Jugador {
     }
 
     @Override
-    public Color getColor() {
-        return Color.BLANCO;
+    public ColorPieza getColor() {
+        return ColorPieza.BLANCO;
     }
 
     @Override

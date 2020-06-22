@@ -7,7 +7,7 @@ import java.util.List;
 import juego.tablero.Casilla;
 import juego.tablero.Movimiento;
 import juego.tablero.Movimiento.MovimientoAtaque;
-import juego.tablero.Movimiento.MovimientoImportante;
+import juego.tablero.Movimiento.MovimientoMayor;
 import juego.tablero.Tablero;
 import juego.tablero.tableroUtilitarios;
 import static juego.tablero.tableroUtilitarios.casillaEsValida;
@@ -20,11 +20,11 @@ public class Caballo extends Pieza {
 
     private final static int[] movimientos_coordinados_candidatos = { -17, -15, -10, -6, 6, 10, 15, 17 };
 
-    public Caballo(Color piezaColor, int posicionPieza) {
+    public Caballo(ColorPieza piezaColor, int posicionPieza) {
         super(TipoPieza.CABALLO, piezaColor, posicionPieza, true);
     }
 
-    public Caballo(Color piezaColor, int posicionPieza, boolean esPrimerMovimiento) {
+    public Caballo(ColorPieza piezaColor, int posicionPieza, boolean esPrimerMovimiento) {
         super(TipoPieza.CABALLO, piezaColor, posicionPieza, esPrimerMovimiento);
     }
 
@@ -47,10 +47,10 @@ public class Caballo extends Pieza {
 
                 final Casilla destinoCandidatoCasilla = tablero.getCasilla(destinoCandidato);
                 if (!destinoCandidatoCasilla.casillaEstaOcupada()) {
-                    movimientosLegales.add(new MovimientoImportante(tablero, this, destinoCandidato));
+                    movimientosLegales.add(new MovimientoMayor(tablero, this, destinoCandidato));
                 } else {
                     final Pieza piezaDestino = destinoCandidatoCasilla.getPieza();
-                    final Color piezaColor = piezaDestino.getPiezaColor();
+                    final ColorPieza piezaColor = piezaDestino.getPiezaColor();
 
                     if (this.piezaColor != piezaColor) {
                         movimientosLegales.add(new MovimientoAtaque(tablero, this, destinoCandidato, piezaDestino));

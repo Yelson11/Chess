@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import juego.tablero.Movimiento;
-import juego.tablero.Movimiento.MovimientoImportante;
+import juego.tablero.Movimiento.MovimientoMayor;
 import juego.tablero.Tablero;
 import juego.tablero.tableroUtilitarios;
 
@@ -17,11 +17,11 @@ public class Peon extends Pieza {
 
     private final static int[] CANDIDATOS_MOVIMIENTOS_VECTOR = { 8, 16, 7, 9 };
 
-    public Peon(Color piezaColor, int posicionPieza) {
+    public Peon(ColorPieza piezaColor, int posicionPieza) {
         super(TipoPieza.PEON, piezaColor, posicionPieza, true);
     }
 
-    public Peon(Color piezaColor, int posicionPieza, boolean esPrimerMovimiento) {
+    public Peon(ColorPieza piezaColor, int posicionPieza, boolean esPrimerMovimiento) {
         super(TipoPieza.PEON, piezaColor, posicionPieza, esPrimerMovimiento);
     }
 
@@ -39,14 +39,14 @@ public class Peon extends Pieza {
             }
 
             if (candidatoActual == 8 && tablero.getCasilla(candidateDestinationCoordinate).casillaEstaOcupada()) {
-                movimientosLegales.add(new MovimientoImportante(tablero, this, candidateDestinationCoordinate));
+                movimientosLegales.add(new MovimientoMayor(tablero, this, candidateDestinationCoordinate));
             } else if (candidatoActual == 16 && this.isFirstMove()
                     && (tableroUtilitarios.SECOND_ROW[this.posicionPieza]) && this.getPiezaColor().esNegra()
                     || (tableroUtilitarios.SEVENTH_ROW[this.posicionPieza]) && this.getPiezaColor().esBlanca()) {
                 final int behindCandidateDestination = this.posicionPieza + (this.piezaColor.getDireccion() * 8);
                 if (!tablero.getCasilla(behindCandidateDestination).casillaEstaOcupada()
                         && !tablero.getCasilla(candidateDestinationCoordinate).casillaEstaOcupada()) {
-                    movimientosLegales.add(new MovimientoImportante(tablero, this, candidateDestinationCoordinate));
+                    movimientosLegales.add(new MovimientoMayor(tablero, this, candidateDestinationCoordinate));
                 }
             } else if (candidatoActual == 7 && !(tableroUtilitarios.EIGHTH_COLUMNA[this.posicionPieza]
                     && this.piezaColor.esBlanca()
@@ -54,7 +54,7 @@ public class Peon extends Pieza {
                 if (tablero.getCasilla(candidateDestinationCoordinate).casillaEstaOcupada()) {
                     final Pieza piezaCandidata = tablero.getCasilla(candidateDestinationCoordinate).getPieza();
                     if (this.piezaColor != piezaCandidata.getPiezaColor()) {
-                        movimientosLegales.add(new MovimientoImportante(tablero, this, candidateDestinationCoordinate));
+                        movimientosLegales.add(new MovimientoMayor(tablero, this, candidateDestinationCoordinate));
                     }
                 }
 
@@ -64,7 +64,7 @@ public class Peon extends Pieza {
                 if (tablero.getCasilla(candidateDestinationCoordinate).casillaEstaOcupada()) {
                     final Pieza piezaCandidata = tablero.getCasilla(candidateDestinationCoordinate).getPieza();
                     if (this.piezaColor != piezaCandidata.getPiezaColor()) {
-                        movimientosLegales.add(new MovimientoImportante(tablero, this, candidateDestinationCoordinate));
+                        movimientosLegales.add(new MovimientoMayor(tablero, this, candidateDestinationCoordinate));
                     }
                 }
             }

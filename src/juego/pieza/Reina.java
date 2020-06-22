@@ -17,11 +17,11 @@ public class Reina extends Pieza {
 
     private final static int[] CANDIDATOS_MOVIMIENTOS_VECTOR = { -9, -8, -7, -1, 1, 7, 8, 9 };
 
-    public Reina(Color piezaColor, int posicionPieza) {
+    public Reina(ColorPieza piezaColor, int posicionPieza) {
         super(TipoPieza.REINA, piezaColor, posicionPieza, true);
     }
 
-    public Reina(Color piezaColor, int posicionPieza, boolean esPrimerMovimiento) {
+    public Reina(ColorPieza piezaColor, int posicionPieza, boolean esPrimerMovimiento) {
         super(TipoPieza.REINA, piezaColor, posicionPieza, esPrimerMovimiento);
     }
 
@@ -46,10 +46,10 @@ public class Reina extends Pieza {
                 if (tableroUtilitarios.casillaEsValida(candidateDestinationCoordinate)) {
                     final Casilla destinoCandidatoCasilla = tablero.getCasilla(candidateDestinationCoordinate);
                     if (!destinoCandidatoCasilla.casillaEstaOcupada()) {
-                        movimientosLegales.add(new Movimiento.MovimientoImportante(tablero, this, candidateDestinationCoordinate));
+                        movimientosLegales.add(new Movimiento.MovimientoMayor(tablero, this, candidateDestinationCoordinate));
                     } else {
                         final Pieza piezaDestino = destinoCandidatoCasilla.getPieza();
-                        final Color piezaColor = piezaDestino.getPiezaColor();
+                        final ColorPieza piezaColor = piezaDestino.getPiezaColor();
 
                         if (this.piezaColor != piezaColor) {
                             movimientosLegales.add(new Movimiento.MovimientoAtaque(tablero, this,

@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-import juego.pieza.Color;
+import juego.pieza.ColorPieza;
 import juego.pieza.Pieza;
 import juego.pieza.Rey;
 import juego.pieza.Pieza.TipoPieza;
@@ -113,7 +113,7 @@ public abstract class Jugador {
 
     public abstract Collection<Pieza> getPiezasActivas();
 
-    public abstract Color getColor();
+    public abstract ColorPieza getColor();
 
     public abstract Jugador getOponente();
 

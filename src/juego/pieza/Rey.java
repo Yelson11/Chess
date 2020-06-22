@@ -7,7 +7,7 @@ import java.util.List;
 import juego.tablero.Casilla;
 import juego.tablero.Movimiento;
 import juego.tablero.Movimiento.MovimientoAtaque;
-import juego.tablero.Movimiento.MovimientoImportante;
+import juego.tablero.Movimiento.MovimientoMayor;
 import juego.tablero.Tablero;
 import juego.tablero.tableroUtilitarios;
 
@@ -19,11 +19,11 @@ public class Rey extends Pieza {
 
     private final static int[] CANDIDATOS_MOVIMIENTOS_VECTOR = { -9, -8, -7, -1, 1, 7, 8, 9 };
 
-    public Rey(Color piezaColor, int posicionPieza) {
+    public Rey(ColorPieza piezaColor, int posicionPieza) {
         super(TipoPieza.REY, piezaColor, posicionPieza, true);
     }
 
-    public Rey(Color piezaColor, int posicionPieza, boolean esPrimerMovimiento) {
+    public Rey(ColorPieza piezaColor, int posicionPieza, boolean esPrimerMovimiento) {
         super(TipoPieza.REY, piezaColor, posicionPieza, esPrimerMovimiento);
     }
 
@@ -43,10 +43,10 @@ public class Rey extends Pieza {
             if (tableroUtilitarios.casillaEsValida(candidateDestinationCoordinate)) {
                 final Casilla casillaDestinoCandidato = tablero.getCasilla(candidateDestinationCoordinate);
                 if (!casillaDestinoCandidato.casillaEstaOcupada()) {
-                    movimientosLegales.add(new MovimientoImportante(tablero, this, candidateDestinationCoordinate));
+                    movimientosLegales.add(new MovimientoMayor(tablero, this, candidateDestinationCoordinate));
                 } else {
                     final Pieza piezaDestino = casillaDestinoCandidato.getPieza();
-                    final Color piezaColor = piezaDestino.getPiezaColor();
+                    final ColorPieza piezaColor = piezaDestino.getPiezaColor();
 
                     if (this.piezaColor != piezaColor) {
                         movimientosLegales

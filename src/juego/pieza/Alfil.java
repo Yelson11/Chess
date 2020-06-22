@@ -7,7 +7,7 @@ import java.util.List;
 import juego.tablero.Casilla;
 import juego.tablero.Movimiento;
 import juego.tablero.Movimiento.MovimientoAtaque;
-import juego.tablero.Movimiento.MovimientoImportante;
+import juego.tablero.Movimiento.MovimientoMayor;
 import juego.tablero.Tablero;
 import juego.tablero.tableroUtilitarios;
 
@@ -19,11 +19,11 @@ public class Alfil extends Pieza {
 
     private final static int[] CANDIDATOS_MOVIMIENTOS_VECTOR = { -9, -7, 7, 9 };
 
-    public Alfil(Color piezaColor, int posicionPieza) {
+    public Alfil(ColorPieza piezaColor, int posicionPieza) {
         super(TipoPieza.ALFIL, piezaColor, posicionPieza, true);
     }
 
-    public Alfil(Color piezaColor, int posicionPieza, boolean esPrimerMovimiento) {
+    public Alfil(ColorPieza piezaColor, int posicionPieza, boolean esPrimerMovimiento) {
         super(TipoPieza.ALFIL, piezaColor, posicionPieza, esPrimerMovimiento);
     }
 
@@ -48,10 +48,10 @@ public class Alfil extends Pieza {
                 if (tableroUtilitarios.casillaEsValida(candidateDestinationCoordinate)) {
                     final Casilla destinoCandidatoCasilla = tablero.getCasilla(candidateDestinationCoordinate);
                     if (!destinoCandidatoCasilla.casillaEstaOcupada()) {
-                        movimientosLegales.add(new MovimientoImportante(tablero, this, candidateDestinationCoordinate));
+                        movimientosLegales.add(new MovimientoMayor(tablero, this, candidateDestinationCoordinate));
                     } else {
                         final Pieza piezaDestino = destinoCandidatoCasilla.getPieza();
-                        final Color piezaColor = piezaDestino.getPiezaColor();
+                        final ColorPieza piezaColor = piezaDestino.getPiezaColor();
 
                         if (this.piezaColor != piezaColor) {
                             movimientosLegales

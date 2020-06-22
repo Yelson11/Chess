@@ -1,6 +1,7 @@
 package juego.tablero;
 
 import juego.pieza.Pieza;
+import juego.tablero.Tablero.ConstructorTablero;
 
 /**
  *
@@ -9,29 +10,46 @@ import juego.pieza.Pieza;
 public abstract class Movimiento 
 {
     final Tablero tablero;
-    final Pieza pieza;
+    final Pieza piezaMovida;
     final int coordenadaDestino;
     
-    private Movimiento(final Tablero tablero, final Pieza piezaMover, final int coordenadaDestino)
+    private Movimiento(final Tablero tablero, final Pieza piezaMovida, final int coordenadaDestino)
     {
         this.tablero = tablero;
-        this.pieza = piezaMover;
+        this.piezaMovida = piezaMovida;
         this.coordenadaDestino = coordenadaDestino;
     }
 
     public abstract Tablero ejecutar();
     
-    public static final class MovimientoImportante extends Movimiento
+    public static final class MovimientoMayor extends Movimiento
     {
         
-        public MovimientoImportante(final Tablero tablero, final Pieza piezaMover, final int destinoCoordenada) {
+        public MovimientoMayor(final Tablero tablero, final Pieza piezaMover, final int destinoCoordenada) {
             super(tablero, piezaMover, destinoCoordenada);
         }
 
         @Override
         public Tablero ejecutar() {
-            // TODO Auto-generated method stub
-            return null;
+            
+            final Tablero.ConstructorTablero constructorTablero = new ConstructorTablero();
+
+            for (final Pieza pieza : this.tablero.jugadorActual().getPiezasActivas()){
+                //TODO hashcode and equals for pieces
+                if (!this.piezaMovida.equals(pieza)){
+                    constructorTablero.setPieza(pieza);
+                }
+            }
+
+            for (final Pieza pieza : this.tablero.jugadorActual().getOponente().getPiezasActivas()){
+                constructorTablero.setPieza(pieza);
+            }
+
+            //mueve la pieza movida
+            constructorTablero.setPieza(null);
+            constructorTablero.setMoveMaker(this.tablero.jugadorActual().getOponente().getColor());
+            return constructorTablero.construirTablero();
+
         }
         
     }
