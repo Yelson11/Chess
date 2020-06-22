@@ -10,34 +10,55 @@ public abstract class Movimiento
 {
     final Tablero tablero;
     final Pieza pieza;
-    final int destinoCoordenada;
+    final int coordenadaDestino;
     
-    private Movimiento(final Tablero tablero, final Pieza piezaMover, final int destinoCoordenada)
+    private Movimiento(final Tablero tablero, final Pieza piezaMover, final int coordenadaDestino)
     {
         this.tablero = tablero;
         this.pieza = piezaMover;
-        this.destinoCoordenada = destinoCoordenada;
+        this.coordenadaDestino = coordenadaDestino;
     }
+
+    public abstract Tablero ejecutar();
     
-    public static final class MajorMove extends Movimiento
+    public static final class MovimientoImportante extends Movimiento
     {
         
-        public MajorMove(final Tablero tablero, final Pieza piezaMover, final int destinoCoordenada) {
+        public MovimientoImportante(final Tablero tablero, final Pieza piezaMover, final int destinoCoordenada) {
             super(tablero, piezaMover, destinoCoordenada);
+        }
+
+        @Override
+        public Tablero ejecutar() {
+            // TODO Auto-generated method stub
+            return null;
         }
         
     }
     
-    public static final class AttackMove extends Movimiento
+    public static final class MovimientoAtaque extends Movimiento
     {
         
         final Pieza piezaAtaque;
         
-        public AttackMove(final Tablero tablero, final Pieza piezaMover, final int destinoCoordenada, final Pieza piezaAtaque) {
+        public MovimientoAtaque(final Tablero tablero, final Pieza piezaMover, final int destinoCoordenada, final Pieza piezaAtaque) {
             super(tablero, piezaMover, destinoCoordenada);
             this.piezaAtaque = piezaAtaque;
         }
+
+        @Override
+        public Tablero ejecutar() {
+            // TODO Auto-generated method stub
+            return null;
+        }
         
     }
+
+	public int getCoordenadaDestino() {
+        
+        return this.coordenadaDestino;
+
+	}
+
     
 }
